@@ -5,11 +5,11 @@ using std::cout;
 using std::endl;
 
 
-class Fraction;		//Объявление класса
-Fraction operator*(Fraction left, Fraction right);	//Объявление оператора
+class Fraction;		    //Объявление класса
+Fraction operator*(Fraction left, Fraction right);	            //Объявление оператора
 Fraction operator/(const Fraction& left, const Fraction& right);
 
-class Fraction		//Описание класса
+class Fraction		    //Описание класса
 {
 	int integer;		//Целая часть
 	int numerator;		//Числитель
@@ -49,7 +49,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -124,18 +124,25 @@ public:
 		return old;
 	}
 
+	//                Type-cast operators:
+	explicit operator int()const
+	{
+		//to_improper();
+		return integer + numerator / denominator;
+	}
+
 
 	//					 Methods:
 	Fraction& to_improper()
 	{
-		//перевод в неправильную дробь:
+		// перевод в неправильную дробь:
 		numerator += integer * denominator;
 		integer = 0;
 		return *this;
 	}
 	Fraction& to_proper()
 	{
-		//перевод в правильную дробь:
+		// перевод в правильную дробь:
 		integer += numerator / denominator;
 		numerator %= denominator;
 		return *this;
@@ -144,12 +151,11 @@ public:
 	{
 		Fraction inverted = *this;
 		inverted.to_improper();
-		swap(inverted.numerator, inverted.denominator);	//Функция swap() меняет местами 2 переменные
+		swap(inverted.numerator, inverted.denominator);	// функция swap() меняет местами 2 переменные
 		return inverted;
 	}
 	Fraction& reduce()
 	{
-		//https://www.webmath.ru/poleznoe/formules_12_7.php
 		int more, less, rest;
 		//more - больше
 		//less - меньше
@@ -278,6 +284,11 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 //#define INCREMENTO_DECREMENTO_CHECK
 //#define COMPARISON_OPERATORS
 //#define STREAMS_CHECK
+//#define TYPE_CONVERSIONS_BASICS
+//#define CONVERSIONS_FROM_OTHER_TO_CLASS
+//#define CONVERSIONS_FROM_CLASS_TO_OTHER
+#define HEADCHOT_A_NICE_DAY
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -355,6 +366,45 @@ cout << i << endl;*/
 	cout << A << endl;
 
 #endif // STREAMS_CHECK
+
+#ifdef TYPE_CONVERSIONS_BASICS
+	int a = 2;   // no conversion
+	double b = 3;  // conversion from less to more
+	int c = b;     // conversion from more to less without data loss
+	int d = 5.5;   // 
+
+#endif // TYPE_CONVERSIONS_BASICS
+
+#ifdef CONVERSIONS_FROM_OTHER_TO_CLASS
+
+Fraction A = (Fraction)5;   //Single-Argument Constructor (From less to more )
+cout << A << endl;
+
+Fraction B;
+B = Fraction(8);           // Single-Argument Constructor -> CopyAssignment (From less to more )
+                           // Single-Argument Constructor  создает из '8' временный безымянный объект 
+                           // а оператор присваивания просто записывает его в существующий объект 'B'
+#endif // CONVERSIONS_FROM_OTHER_TO_CLASS
+
+#ifdef CONVERSIONS_FROM_CLASS_TO_OTHER
+
+    Fraction A(2, 3, 4);
+	A.to_improper().print();
+	int a = (int)A;
+	cout << a << endl; 
+
+	double b = A;
+	cout << b << endl;
+
+#endif // CONVERSIONS_FROM_CLASS_TO_OTHER
+
+#ifdef HEADCHOT_A_NICE_DAY
+	
+
+
+
+
+#endif // HEADCHOT_A_NICE_DAY
 
 
 
