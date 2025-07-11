@@ -56,6 +56,18 @@ public:
 		this->denominator = 1;
 		cout << "SingleArgumentConstructor:" << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		// decimal - десятичная дробь
+		decimal += 1e-10;
+		integer = decimal;           // 1) получаем целую часть дроби.
+		decimal -= integer;          // 2) убираем целую часть из десятичной дроби
+		denominator = 1e+9;          // 3) получаем максимально возможный знаменатель 1000000000;  
+		numerator = decimal * denominator;   // 4) вытаскиваем дробную часть в числитель.
+		reduce();
+		cout << "SingleArgumentConstructor: " << this << endl;
+
+	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -400,7 +412,8 @@ B = Fraction(8);           // Single-Argument Constructor -> CopyAssignment (Fro
 
 #ifdef HEADCHOT_A_NICE_DAY
 	
-
+	Fraction A = 3.333;         // Conversion from 'double' to 'Fraction'
+	cout << A << endl;
 
 
 
