@@ -142,6 +142,10 @@ public:
 		//to_improper();
 		return integer + numerator / denominator;
 	}
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
 
 
 	//					 Methods:
@@ -298,8 +302,8 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 //#define STREAMS_CHECK
 //#define TYPE_CONVERSIONS_BASICS
 //#define CONVERSIONS_FROM_OTHER_TO_CLASS
-//#define CONVERSIONS_FROM_CLASS_TO_OTHER
-#define HEADCHOT_A_NICE_DAY
+#define CONVERSIONS_FROM_CLASS_TO_OTHER
+//#define HEADCHOT_A_NICE_DAY
 
 void main()
 {
@@ -405,7 +409,7 @@ B = Fraction(8);           // Single-Argument Constructor -> CopyAssignment (Fro
 	int a = (int)A;
 	cout << a << endl; 
 
-	double b = A;
+	double b = A;            
 	cout << b << endl;
 
 #endif // CONVERSIONS_FROM_CLASS_TO_OTHER
