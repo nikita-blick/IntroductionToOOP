@@ -111,6 +111,14 @@ public:
 	{
 		return *this = *this / other;
 	}
+	Fraction& operator+=(const Fraction& other)
+	{
+		return *this = *this + other;
+	}
+	Fraction& operator-=(const Fraction& other)
+	{
+		return *this = *this - other;
+	}
 
 	//				Incremento/Decremento:
 	Fraction& operator++()
@@ -213,6 +221,17 @@ Fraction operator+(Fraction left, Fraction right)
 		left.get_denominator() * right.get_denominator()
 	).to_proper();
 }
+Fraction operator-(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	(
+		left.get_numerator() * right.get_denominator() - right.get_numerator() * left.get_denominator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
+}
+
 
 Fraction operator*(Fraction left, Fraction right)
 {
