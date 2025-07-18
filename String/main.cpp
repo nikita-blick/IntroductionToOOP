@@ -3,27 +3,64 @@ using namespace std;
 
 #define delimiter "\n----------------------------------------------------------\n"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////                 Объявление класса (Class declaration)                               /////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class String
 {
 	int size;      // размер строки в Байтах ( с учетом NULL-Terminator)
 	char* str;     // адрес строки в динамической памяти 
-public:
-	int get_size()const
+public:                            // Модификатор
+	int get_size()const;
+	const char* get_str()const;
+	char* get_str();
+
+
+	//            Constructors:
+	explicit String(int size = 80);
+
+	String(const char* str);
+	String(const String& other);
+	String(String&& other)noexcept;
+	~String();
+	//     Operators:
+	String& operator=(const String& other);
+	String& operator=(String&& other)noexcept;
+	char operator[](int i)const;
+	char& operator[](int i);
+
+	//        Methods:
+	void print()const;
+	
+};
+/////////////////                Конец Объявления класса (Class declaration end)                      /////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////                 Определение класса (Class definition)                              /////////////////
+
+                            // Модификатор
+	int String::get_size()const
 	{
 		return size;
 	}
-	const char* get_str()const
+	const char* String::get_str()const
 	{
 		return str;
 	}
-	char* get_str()
+	char* String::get_str()
 	{
 		return str;
 	}
 
 
 	//            Constructors:
-	explicit String(int size = 80) :size(size), str(new char[size] {})   // за скобками перем  // принимаемый параметр - это серый цвет 
+    String::String(int size) :size(size), str(new char[size] {})   // за скобками перем  // принимаемый параметр - это серый цвет 
 	{
 		// конструктор по умолчанию создает пустую строку размером 80 Байт 
 		//this->size = size;
@@ -31,14 +68,14 @@ public:
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
 
-	String(const char* str): String(strlen(str) + 1)
+	String::String(const char* str) : String(strlen(str) + 1)
 	{
 		//this->size = strlen(str) + 1;     // strlen() возращает размер строки в символах, +1 нужен чтобы выдедилась память 
 		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	String(const String& other): String(other.str)
+	String::String(const String& other) : String(other.str)
 	{
 		//this->size = other.size;
 		//this->str = other.str;       //Shallow copy
@@ -48,7 +85,7 @@ public:
 			//this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	String(String&& other)noexcept: size(other.size), str(other.str)
+	String::String(String&& other)noexcept : size(other.size), str(other.str)
 	{
 		// MoveConstructor- ShallowCopy:
 		//this->size = other.size;
@@ -58,18 +95,18 @@ public:
 		other.str = nullptr;
 		cout << "MoveConstructor:\t" << this << endl;
 	}
-	~String()
+	String::~String()
 	{
 		delete[] str;
 		str = nullptr;
 		size = 0;
-		cout << "Destructor:\t\t" << this << endl; 
+		cout << "Destructor:\t\t" << this << endl;
 	}
 	//     Operators:
-	String& operator=(const String& other)
+	String& String::operator=(const String& other)
 	{
 		// this->str = other.str;  // shallow copy - поверностное копирование
-		
+
 		// 0) проверяем, не является ли тот объект этим объектом:
 		if (this == &other)return *this;
 		// 1) удаляем старую динамическую память 
@@ -82,7 +119,7 @@ public:
 		cout << "CopyAssigment:\t\t" << this << endl;
 		return *this;
 	}
-	String& operator=(String&& other)noexcept
+	String& String::operator=(String&& other)noexcept
 	{
 		// 0) Проверка, не является ли 'this' and 'other' одним и тем же объектом
 		if (this == &other)return *this;
@@ -97,27 +134,23 @@ public:
 		cout << "MoveAssignment:\t\t" << this << endl;
 		return *this;
 	}
-	char operator[](int i)const
+	char String::operator[](int i)const
 	{
 		return str[i];
 	}
-	char& operator[](int i)
+	char& String::operator[](int i)
 	{
 		return str[i];
 	}
 
 
 	//        Methods:
-	void print()const
+	void String::print()const
 	{
 		cout << "Size:\t" << size << endl;
 		cout << "Str:\t" << str << endl;
 	}
-	
-	
-	
 
-};
 String operator+(const String& left, const String& right)
 {
 	String result(left.get_size() + right.get_size() - 1);
@@ -133,6 +166,10 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 {
 	return os << obj.get_str();
 }
+
+/////////////////                Конец Определения класса (Class definition end)                     /////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 //#define CONSTRUCTORS_CHECK
 //#define COPY_SEMANTIC_CHECK
